@@ -6,7 +6,7 @@
 /*   By: jgonfroy <jgonfroy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/03 14:20:07 by jgonfroy          #+#    #+#             */
-/*   Updated: 2021/02/03 18:10:47 by jgonfroy         ###   ########.fr       */
+/*   Updated: 2021/02/06 15:20:01 by jgonfroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,10 @@ int     handle_error_arg(char *error)
         return (1);
 }
 
-int	handle_error(char *str)
+int	handle_error(char *str, void *item)
 {
+	if (item)
+		free(item);
 	write(2, str, ft_strlen(str));
 	return (1);
 }

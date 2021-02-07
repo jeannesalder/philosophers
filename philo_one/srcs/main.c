@@ -6,20 +6,23 @@
 /*   By: jgonfroy <jgonfroy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 21:47:04 by jgonfroy          #+#    #+#             */
-/*   Updated: 2021/02/03 22:02:10 by jgonfroy         ###   ########.fr       */
+/*   Updated: 2021/02/07 22:38:44 by jgonfroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
-void	*start_philo(void *arg)
+void	*start_philo(void *tmp)
 {
-	(void)arg;
+	t_philo *philo;
 
+	philo = tmp;
+	while (philo->nb_meal < 5)
+		handle_eating(*philo);
 	return (NULL);
 }
 
-int	start_threads(t_arg arg)
+int	set_threads(t_arg arg)
 {
 	int		i;
 	pthread_t	id;
@@ -28,11 +31,23 @@ int	start_threads(t_arg arg)
 	while (i < arg.nb_philo)
 	{
 		arg.philo[i] = get_info_philo(arg, i);
-		if (pthread_create(&id, NULL, &start_philo, &arg))
-			return (handle_error("Error with thread\n"));
+		if (pthread_create(&id, NULL, &start_philo, &arg.philo[i]))
+			return (handle_error("Error with thread\n", arg.philo));
+		pthread_detach(id);
 		usleep(100);
 		i++;
 	}
+//	usleep(100);
+/*	i = 1;
+	while (i < arg.nb_philo)
+	{
+		arg.philo[i] = get_info_philo(arg, i);
+		if (pthread_create(&id, NULL, &start_philo, &arg.philo[i]))
+			return (handle_error("Error with thread\n", arg.philo));
+		pthread_detach(id);
+		i = i + 2;
+	}
+*/
 	return (0);
 }
 
@@ -41,7 +56,7 @@ int	set_struct(t_arg *arg, char **argv)
 	(void)arg;
 	(void)argv;
 
-	arg->time = get_time();
+	gettimeofday(&arg->time, NULL);
 	arg->philo = NULL;
 	arg->nb_philo = ft_atoi(argv[1]);
 	arg->t_die = ft_atoi(argv[2]);
@@ -64,8 +79,31 @@ int	main(int ac, char **argv)
 		return (handle_error_arg("Wrong number of arguments\n"));
 	if (set_struct(&arg, argv))
 		return (handle_error_arg("Wrong arguments\n"));
-	if (xmalloc((void **)&(arg.philo), sizeof(t_philo) * arg.nb_philo))
-		return (handle_error("Error with malloc.\n"));
-	start_threads(arg);
+	if (xmalloc((void **)&arg.philo, sizeof(t_philo) * arg.nb_philo))
+		return (handle_error("Error with malloc.\n", NULL));
+	if (set_mutexes(&arg))
+		return (handle_error("Error with mutex.\n", arg.philo));
+	if( set_threads(arg))
+		return (1);
+	
+/*
+	while (is_over(void))
+	{
+		get_state(void);
+	}
+*/
+
+	int j = 0;
+	while (1)
+		j = 1;
+
+	pthread_mutex_destroy(&arg.waiter);
+	int i = 0;
+	while (i < arg.nb_philo)
+	{
+		pthread_mutex_destroy(&arg.forks[i]);
+		i++;
+	}
 	free(arg.philo);
+	free(arg.forks);
 }
