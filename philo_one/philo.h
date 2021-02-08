@@ -6,7 +6,7 @@
 /*   By: jgonfroy <jgonfroy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/01 16:52:30 by jgonfroy          #+#    #+#             */
-/*   Updated: 2021/02/07 22:41:45 by jgonfroy         ###   ########.fr       */
+/*   Updated: 2021/02/08 16:58:01 by jgonfroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,10 @@ typedef struct	s_philo
 	int		t_sleep;
 	int		state;
 	int		start;
+	int		nb_eat;
 	int		nb_meal;
-	struct timeval	last_meal;
-	struct timeval	start_time;
+	unsigned long	last_meal;
+	unsigned long	start_time;
 	pthread_mutex_t	*waiter;
 	pthread_mutex_t	*left_fork;
 	pthread_mutex_t	*right_fork;
@@ -39,7 +40,7 @@ typedef struct	s_philo
 
 typedef struct	s_arg
 {
-	struct timeval	time;
+	unsigned long	time;
 	int		nb_philo;
 	int		t_die;
 	int		t_eat;
@@ -70,7 +71,9 @@ t_philo	get_info_philo(t_arg arg, int i);
  ** libft_utils.c
 */
 
-unsigned long	get_time(struct timeval start);
+unsigned long	get_time(void);
+unsigned long	get_timestamp(unsigned long start_time);
+
 int	xmalloc(void **ptr, int size);
 int	ft_atoi(char *str);
 int	ft_strlen(char *str);
@@ -78,7 +81,7 @@ int	ft_strlen(char *str);
 /*
  ** libft_utils.c
 */
-void	display_action(struct timeval start_time, int id, char *action);
+void	display_action(unsigned long start_time, int id, char *action);
 
 /*
  ** ft_itoa.c
@@ -89,6 +92,8 @@ char	*ft_itoa(unsigned long nbr);
 /*
  ** handle_actions.c
 */
-int	handle_eating(t_philo philo);
+void	ft_usleep(unsigned long break_time);
+int		handle_eating(t_philo philo, unsigned long *time_meal);
+int		handle_sleeping(t_philo philo);
 
 #endif

@@ -6,17 +6,17 @@
 /*   By: jgonfroy <jgonfroy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/07 11:43:49 by jgonfroy          #+#    #+#             */
-/*   Updated: 2021/02/07 22:44:26 by jgonfroy         ###   ########.fr       */
+/*   Updated: 2021/02/08 16:22:52 by jgonfroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
-char	*compose_str(char *s1, char *s2, char *s3)
+char			*compose_str(char *s1, char *s2, char *s3)
 {
-	int	i;
-	int	j;
-	int	size;
+	int		i;
+	int		j;
+	int		size;
 	char	*dest;
 
 	i = 0;
@@ -34,30 +34,34 @@ char	*compose_str(char *s1, char *s2, char *s3)
 	j = 0;
 	while (s3[j])
 		dest[i++] = s3[j++];
-
 	dest[i++] = '\n';
 	dest[i] = 0;
 	return (dest);
 }
 
-void	display_action(struct timeval start_time, int id, char *action)
+void			display_action(unsigned long start_time, int id, char *action)
 {
-	char		*str;
+	char			*str;
 	unsigned long	time;
 
-	time =	get_time(start_time);
+	time = get_timestamp(start_time);
 	str = compose_str(ft_itoa(time), ft_itoa(id), action);
 	write(1, str, ft_strlen(str));
 	free(str);
 }
 
-unsigned long   get_time(struct timeval start)
+unsigned long	get_time(void)
 {
-        unsigned long           time;
-        static struct timeval   tv; 
+	static struct timeval	tv;
 
-        gettimeofday(&tv, NULL);
-	time = (tv.tv_sec - start.tv_sec) * 1000 + (tv.tv_usec - start.tv_usec) / 1000;
-        return (time);
+	gettimeofday(&tv, NULL);
+	return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
 }
 
+unsigned long	get_timestamp(unsigned long start)
+{
+	unsigned long	time;
+
+	time = get_time();
+	return (time - start);
+}

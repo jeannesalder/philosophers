@@ -1,6 +1,6 @@
 NAME		= philo_one
 
-CC		= clang-9
+CC		= gcc
 CFLAGS		= -pthread -Werror -Wextra -Wall
 FSAN		= -g3 -fsanitize=address
 RM		= rm -rf
