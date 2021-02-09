@@ -6,7 +6,7 @@
 /*   By: jgonfroy <jgonfroy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 21:47:04 by jgonfroy          #+#    #+#             */
-/*   Updated: 2021/02/08 16:57:25 by jgonfroy         ###   ########.fr       */
+/*   Updated: 2021/02/09 14:34:52 by jgonfroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,9 @@ void	*start_philo(void *tmp)
 	philo = tmp;
 	while (philo->state == 0)
 	{
-		philo->state = handle_eating(*philo, &(philo->last_meal));
-		philo->nb_meal++;
+		philo->state = handle_eating(*philo, &(philo->last_meal), &(philo->nb_meal));
+		if (philo->state == 1)
+			return (NULL);
 		handle_sleeping(*philo);
 	}
 	return (NULL);
@@ -47,6 +48,7 @@ int		set_threads(t_arg arg)
 int		set_struct(t_arg *arg, char **argv)
 {
 	arg->time = get_time();
+	arg->end = 0;
 	arg->philo = NULL;
 	arg->nb_philo = ft_atoi(argv[1]);
 	arg->t_die = ft_atoi(argv[2]);
@@ -77,6 +79,30 @@ void	end_philo(t_arg *arg)
 	free(arg->forks);
 }
 
+int	is_finish(t_arg arg)
+{
+	int	i;
+	int finished_meal;
+
+	i = 0;
+	finished_meal = 0;
+	while (i < arg.nb_philo)
+	{
+		if (arg.philo[i].state == 1)
+			return (1);
+		if (arg.philo[i].state == 2)
+			finished_meal++;
+		i++;
+	}
+	if (finished_meal == arg.nb_philo)
+	{
+		pthread_mutex_lock(arg.philo->msg);
+		write(1, "simulation is over\n", 19);
+		return (1);
+	}
+	return (0);
+}
+
 int		main(int ac, char **argv)
 {
 	t_arg	arg;
@@ -91,8 +117,7 @@ int		main(int ac, char **argv)
 		return (handle_error("Error with mutex.\n", arg.philo));
 	if (set_threads(arg))
 		return (1);
-	int i = 0;
-	while (1)
-		i = 1;
+	while (!arg.end)
+		arg.end = is_finish(arg);
 	end_philo(&arg);
 }

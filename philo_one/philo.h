@@ -6,7 +6,7 @@
 /*   By: jgonfroy <jgonfroy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/01 16:52:30 by jgonfroy          #+#    #+#             */
-/*   Updated: 2021/02/08 16:58:01 by jgonfroy         ###   ########.fr       */
+/*   Updated: 2021/02/09 14:19:35 by jgonfroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ typedef struct	s_philo
 	pthread_mutex_t	*waiter;
 	pthread_mutex_t	*left_fork;
 	pthread_mutex_t	*right_fork;
+	pthread_mutex_t	*msg;
 }			t_philo;
 
 typedef struct	s_arg
@@ -46,7 +47,9 @@ typedef struct	s_arg
 	int		t_eat;
 	int		t_sleep;
 	int		nb_eat;
+	int		end;
 	pthread_mutex_t	waiter;
+	pthread_mutex_t	msg;
 	pthread_mutex_t	*forks;
 	t_philo		*philo;
 }		t_arg;
@@ -81,7 +84,7 @@ int	ft_strlen(char *str);
 /*
  ** libft_utils.c
 */
-void	display_action(unsigned long start_time, int id, char *action);
+void	display_action(t_philo philo, char *action);
 
 /*
  ** ft_itoa.c
@@ -93,7 +96,7 @@ char	*ft_itoa(unsigned long nbr);
  ** handle_actions.c
 */
 void	ft_usleep(unsigned long break_time);
-int		handle_eating(t_philo philo, unsigned long *time_meal);
+int		handle_eating(t_philo philo, unsigned long *time_meal, int *nb_meal);
 int		handle_sleeping(t_philo philo);
 
 #endif
