@@ -6,7 +6,7 @@
 /*   By: jgonfroy <jgonfroy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/07 11:23:08 by jgonfroy          #+#    #+#             */
-/*   Updated: 2021/02/10 15:38:14 by jgonfroy         ###   ########.fr       */
+/*   Updated: 2021/02/10 22:47:09 by jgonfroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	ft_usleep(unsigned long break_time)
 int		handle_death(t_philo philo)
 {
 	display_action(philo, "died");
-	pthread_mutex_lock(philo.msg);
+//	pthread_mutex_lock(philo.msg);
 	return (1);
 }
 

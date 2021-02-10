@@ -6,7 +6,7 @@
 /*   By: jgonfroy <jgonfroy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 21:47:04 by jgonfroy          #+#    #+#             */
-/*   Updated: 2021/02/10 17:11:15 by jgonfroy         ###   ########.fr       */
+/*   Updated: 2021/02/10 22:44:44 by jgonfroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ void	*start_philo(void *tmp)
 void	*monitor(void *tmp)
 {
 	int	i;
+	int	diff;
 	int	finished_meal;
 	unsigned long time;
 	t_arg *arg;
@@ -41,13 +42,12 @@ void	*monitor(void *tmp)
 		time = get_time();
 		while (i < arg->nb_philo)
 		{
-//			(time - arg->philo[i].last_meal > (unsigned long)arg->t_die)
-			if (time - arg->philo[i].last_meal > (unsigned long)arg->t_die)
+			diff = time - arg->philo[i].last_meal;
+			if (diff > arg->t_die)
 			{
-				if (time != arg->time)
-					write (1, "hey\n", 4);
-			//	handle_death(arg->philo[i]);
-			//	pthread_mutex_lock(arg->philo->msg);
+				handle_death(arg->philo[i]);
+				pthread_mutex_lock(arg->philo[i].msg);
+				pthread_mutex_unlock(arg->cpy_end);
 				return (NULL);
 			}
 			if (arg->philo[i].state == 1)
@@ -56,7 +56,7 @@ void	*monitor(void *tmp)
 		}
 		if (finished_meal == arg->nb_philo)
 		{
-			pthread_mutex_lock(arg->philo->msg);
+			pthread_mutex_lock(arg->philo[i].msg);
 			write(1, "simulation is over\n", 19);
 			pthread_mutex_unlock(arg->cpy_end);
 			return (NULL);
