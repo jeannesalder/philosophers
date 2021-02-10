@@ -6,7 +6,7 @@
 /*   By: jgonfroy <jgonfroy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 21:47:04 by jgonfroy          #+#    #+#             */
-/*   Updated: 2021/02/09 14:34:52 by jgonfroy         ###   ########.fr       */
+/*   Updated: 2021/02/10 17:11:15 by jgonfroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,52 @@ void	*start_philo(void *tmp)
 	t_philo *philo;
 
 	philo = tmp;
-	while (philo->state == 0)
+	while (philo->state != 1)
 	{
-		philo->state = handle_eating(*philo, &(philo->last_meal), &(philo->nb_meal));
-		if (philo->state == 1)
-			return (NULL);
+		handle_eating(philo, *philo);
 		handle_sleeping(*philo);
+		handle_thinking(*philo);
+	}
+	return (NULL);
+}
+
+void	*monitor(void *tmp)
+{
+	int	i;
+	int	finished_meal;
+	unsigned long time;
+	t_arg *arg;
+
+	i = 0;
+	finished_meal = 0;
+	arg = tmp;
+	while (1)
+	{
+		time = get_time();
+		while (i < arg->nb_philo)
+		{
+//			(time - arg->philo[i].last_meal > (unsigned long)arg->t_die)
+			if (time - arg->philo[i].last_meal > (unsigned long)arg->t_die)
+			{
+				if (time != arg->time)
+					write (1, "hey\n", 4);
+			//	handle_death(arg->philo[i]);
+			//	pthread_mutex_lock(arg->philo->msg);
+				return (NULL);
+			}
+			if (arg->philo[i].state == 1)
+				finished_meal++;
+			i++;
+		}
+		if (finished_meal == arg->nb_philo)
+		{
+			pthread_mutex_lock(arg->philo->msg);
+			write(1, "simulation is over\n", 19);
+			pthread_mutex_unlock(arg->cpy_end);
+			return (NULL);
+		}
+		usleep(3000);
+		i = 0;
 	}
 	return (NULL);
 }
@@ -33,6 +73,9 @@ int		set_threads(t_arg arg)
 	pthread_t	id;
 
 	i = 0;
+	if (pthread_create(&arg.id_thread, NULL, &monitor, &arg))
+		return (handle_error("Error with thread\n", arg.philo));
+	pthread_detach(arg.id_thread);
 	while (i < arg.nb_philo)
 	{
 		arg.philo[i] = get_info_philo(arg, i);
@@ -48,7 +91,6 @@ int		set_threads(t_arg arg)
 int		set_struct(t_arg *arg, char **argv)
 {
 	arg->time = get_time();
-	arg->end = 0;
 	arg->philo = NULL;
 	arg->nb_philo = ft_atoi(argv[1]);
 	arg->t_die = ft_atoi(argv[2]);
@@ -59,47 +101,8 @@ int		set_struct(t_arg *arg, char **argv)
 	else
 		arg->nb_eat = -1;
 	if (!arg->nb_philo || !arg->t_die || !arg->t_eat || !arg->t_sleep || \
-	!arg->nb_eat)
+			!arg->nb_eat)
 		return (1);
-	return (0);
-}
-
-void	end_philo(t_arg *arg)
-{
-	int	i;
-
-	i = 0;
-	pthread_mutex_destroy(&arg->waiter);
-	while (i < arg->nb_philo)
-	{
-		pthread_mutex_destroy(&arg->forks[i]);
-		i++;
-	}
-	free(arg->philo);
-	free(arg->forks);
-}
-
-int	is_finish(t_arg arg)
-{
-	int	i;
-	int finished_meal;
-
-	i = 0;
-	finished_meal = 0;
-	while (i < arg.nb_philo)
-	{
-		if (arg.philo[i].state == 1)
-			return (1);
-		if (arg.philo[i].state == 2)
-			finished_meal++;
-		i++;
-	}
-	if (finished_meal == arg.nb_philo)
-	{
-		pthread_mutex_lock(arg.philo->msg);
-		write(1, "simulation is over\n", 19);
-		return (1);
-	}
 	return (0);
 }
 
@@ -117,7 +120,6 @@ int		main(int ac, char **argv)
 		return (handle_error("Error with mutex.\n", arg.philo));
 	if (set_threads(arg))
 		return (1);
-	while (!arg.end)
-		arg.end = is_finish(arg);
-	end_philo(&arg);
+	pthread_mutex_lock(&arg.end);
+//	end_philo(&arg);
 }

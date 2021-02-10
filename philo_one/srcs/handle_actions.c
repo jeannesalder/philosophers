@@ -6,7 +6,7 @@
 /*   By: jgonfroy <jgonfroy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/07 11:23:08 by jgonfroy          #+#    #+#             */
-/*   Updated: 2021/02/09 14:36:57 by jgonfroy         ###   ########.fr       */
+/*   Updated: 2021/02/10 15:38:14 by jgonfroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,8 @@ int		handle_death(t_philo philo)
 	return (1);
 }
 
-int		handle_eating(t_philo philo, unsigned long *time_meal, int *nb_meal)
+t_philo	handle_eating(t_philo *ptr, t_philo philo)
 {
-	if (get_time() - *time_meal > (unsigned long)philo.t_die)
-		return (handle_death(philo));
 	pthread_mutex_lock(philo.waiter);
 	pthread_mutex_lock(philo.left_fork);
 	display_action(philo, "has taken a fork");
@@ -42,17 +40,20 @@ int		handle_eating(t_philo philo, unsigned long *time_meal, int *nb_meal)
 	ft_usleep(philo.t_eat);
 	pthread_mutex_unlock(philo.left_fork);
 	pthread_mutex_unlock(philo.right_fork);
-	*time_meal = get_time();
-	*nb_meal = (*nb_meal) + 1;
-	if (philo.nb_eat != -1 && *(nb_meal) >= philo.nb_eat)
-		return (2);
-	return (0);
+	ptr->last_meal = get_time();
+	ptr->nb_meal++;
+	if (philo.nb_eat != -1 && ptr->nb_meal >= philo.nb_eat)
+		ptr->state = 1;
+	return (philo);
 }
 
-int		handle_sleeping(t_philo philo)
+void	handle_sleeping(t_philo philo)
 {
 	display_action(philo, "is sleeping");
 	ft_usleep(philo.t_sleep);
+}
+
+void	handle_thinking(t_philo philo)
+{
 	display_action(philo, "is thinking");
-	return (0);
 }

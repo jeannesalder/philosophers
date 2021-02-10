@@ -6,7 +6,7 @@
 /*   By: jgonfroy <jgonfroy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/03 16:48:22 by jgonfroy          #+#    #+#             */
-/*   Updated: 2021/02/09 14:09:11 by jgonfroy         ###   ########.fr       */
+/*   Updated: 2021/02/10 16:33:34 by jgonfroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,10 @@ int		set_mutexes(t_arg *arg)
 		return (1);
 	if (pthread_mutex_init(&arg->msg, NULL))
 		return (1);
+	if (pthread_mutex_init(&arg->end, NULL))
+		return (1);
+	pthread_mutex_lock(&arg->end);
+	arg->cpy_end = &arg->end;
 	if (xmalloc((void **)&arg->forks, sizeof(pthread_mutex_t) * arg->nb_philo))
 		return (1);
 	while (i < arg->nb_philo)

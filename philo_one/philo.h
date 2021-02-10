@@ -6,7 +6,7 @@
 /*   By: jgonfroy <jgonfroy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/01 16:52:30 by jgonfroy          #+#    #+#             */
-/*   Updated: 2021/02/09 14:19:35 by jgonfroy         ###   ########.fr       */
+/*   Updated: 2021/02/10 16:32:13 by jgonfroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,11 @@ typedef struct	s_arg
 	int		t_eat;
 	int		t_sleep;
 	int		nb_eat;
-	int		end;
+	pthread_t		id_thread;
 	pthread_mutex_t	waiter;
 	pthread_mutex_t	msg;
+	pthread_mutex_t	end;
+	pthread_mutex_t	*cpy_end;
 	pthread_mutex_t	*forks;
 	t_philo		*philo;
 }		t_arg;
@@ -96,7 +98,15 @@ char	*ft_itoa(unsigned long nbr);
  ** handle_actions.c
 */
 void	ft_usleep(unsigned long break_time);
-int		handle_eating(t_philo philo, unsigned long *time_meal, int *nb_meal);
-int		handle_sleeping(t_philo philo);
+int		handle_death(t_philo philo);
+t_philo	handle_eating(t_philo *ptr, t_philo philo);
+void	handle_sleeping(t_philo philo);
+void	handle_thinking(t_philo philo);
+
+/*
+ ** end_simulation.c
+*/
+void	end_philo(t_arg *arg);
+int		is_finish(t_arg arg);
 
 #endif
