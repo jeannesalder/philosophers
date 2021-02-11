@@ -6,7 +6,7 @@
 /*   By: jgonfroy <jgonfroy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 21:47:04 by jgonfroy          #+#    #+#             */
-/*   Updated: 2021/02/10 22:44:44 by jgonfroy         ###   ########.fr       */
+/*   Updated: 2021/02/11 15:52:18 by jgonfroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	*monitor(void *tmp)
 			pthread_mutex_unlock(arg->cpy_end);
 			return (NULL);
 		}
-		usleep(3000);
+		usleep(1000);
 		i = 0;
 	}
 	return (NULL);
@@ -72,18 +72,28 @@ int		set_threads(t_arg arg)
 	int			i;
 	pthread_t	id;
 
-	i = 0;
 	if (pthread_create(&arg.id_thread, NULL, &monitor, &arg))
 		return (handle_error("Error with thread\n", arg.philo));
 	pthread_detach(arg.id_thread);
+	i = 0;
 	while (i < arg.nb_philo)
 	{
 		arg.philo[i] = get_info_philo(arg, i);
 		if (pthread_create(&id, NULL, &start_philo, &arg.philo[i]))
 			return (handle_error("Error with thread\n", arg.philo));
 		pthread_detach(id);
-		usleep(100);
-		i++;
+		usleep(50);
+		i = i + 2;
+	}
+	i = 1;
+	while (i < arg.nb_philo)
+	{
+		arg.philo[i] = get_info_philo(arg, i);
+		if (pthread_create(&id, NULL, &start_philo, &arg.philo[i]))
+			return (handle_error("Error with thread\n", arg.philo));
+		pthread_detach(id);
+		usleep(50);
+		i = i + 2;
 	}
 	return (0);
 }

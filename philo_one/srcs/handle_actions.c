@@ -6,7 +6,7 @@
 /*   By: jgonfroy <jgonfroy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/07 11:23:08 by jgonfroy          #+#    #+#             */
-/*   Updated: 2021/02/10 22:47:09 by jgonfroy         ###   ########.fr       */
+/*   Updated: 2021/02/11 15:33:12 by jgonfroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,23 +24,22 @@ void	ft_usleep(unsigned long break_time)
 int		handle_death(t_philo philo)
 {
 	display_action(philo, "died");
-//	pthread_mutex_lock(philo.msg);
 	return (1);
 }
 
 t_philo	handle_eating(t_philo *ptr, t_philo philo)
 {
-	pthread_mutex_lock(philo.waiter);
+//	pthread_mutex_lock(philo.waiter);
 	pthread_mutex_lock(philo.left_fork);
 	display_action(philo, "has taken a fork");
 	pthread_mutex_lock(philo.right_fork);
-	pthread_mutex_unlock(philo.waiter);
+//	pthread_mutex_unlock(philo.waiter);
 	display_action(philo, "has taken a fork");
 	display_action(philo, "is eating");
+	ptr->last_meal = get_time();
 	ft_usleep(philo.t_eat);
 	pthread_mutex_unlock(philo.left_fork);
 	pthread_mutex_unlock(philo.right_fork);
-	ptr->last_meal = get_time();
 	ptr->nb_meal++;
 	if (philo.nb_eat != -1 && ptr->nb_meal >= philo.nb_eat)
 		ptr->state = 1;
