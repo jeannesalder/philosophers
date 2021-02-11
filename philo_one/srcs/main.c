@@ -6,7 +6,7 @@
 /*   By: jgonfroy <jgonfroy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 21:47:04 by jgonfroy          #+#    #+#             */
-/*   Updated: 2021/02/11 15:52:18 by jgonfroy         ###   ########.fr       */
+/*   Updated: 2021/02/11 16:47:50 by jgonfroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,11 @@ void	*monitor(void *tmp)
 	t_arg *arg;
 
 	i = 0;
-	finished_meal = 0;
 	arg = tmp;
 	while (1)
 	{
 		time = get_time();
+		finished_meal = 0;
 		while (i < arg->nb_philo)
 		{
 			diff = time - arg->philo[i].last_meal;
@@ -53,13 +53,12 @@ void	*monitor(void *tmp)
 			if (arg->philo[i].state == 1)
 				finished_meal++;
 			i++;
-		}
-		if (finished_meal == arg->nb_philo)
-		{
-			pthread_mutex_lock(arg->philo[i].msg);
-			write(1, "simulation is over\n", 19);
-			pthread_mutex_unlock(arg->cpy_end);
-			return (NULL);
+			if (finished_meal == arg->nb_philo)
+			{
+				write(1, "simulation is over\n", 19);
+				pthread_mutex_unlock(arg->cpy_end);
+				return (NULL);
+			}
 		}
 		usleep(1000);
 		i = 0;
@@ -131,5 +130,5 @@ int		main(int ac, char **argv)
 	if (set_threads(arg))
 		return (1);
 	pthread_mutex_lock(&arg.end);
-//	end_philo(&arg);
+	//	end_philo(&arg);
 }
