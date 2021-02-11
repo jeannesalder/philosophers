@@ -6,7 +6,7 @@
 /*   By: jgonfroy <jgonfroy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 21:47:04 by jgonfroy          #+#    #+#             */
-/*   Updated: 2021/02/11 16:47:50 by jgonfroy         ###   ########.fr       */
+/*   Updated: 2021/02/11 17:06:40 by jgonfroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,10 @@ void	*start_philo(void *tmp)
 
 void	*monitor(void *tmp)
 {
-	int	i;
-	int	diff;
-	int	finished_meal;
-	unsigned long time;
+	int				i;
+	int				diff;
+	int				finished_meal;
+	unsigned long	time;
 	t_arg *arg;
 
 	i = 0;
