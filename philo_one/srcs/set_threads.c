@@ -6,7 +6,7 @@
 /*   By: jgonfroy <jgonfroy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/03 16:48:22 by jgonfroy          #+#    #+#             */
-/*   Updated: 2021/02/10 16:33:34 by jgonfroy         ###   ########.fr       */
+/*   Updated: 2021/02/12 10:28:57 by jgonfroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,6 @@ int		set_mutexes(t_arg *arg)
 	int	i;
 
 	i = 0;
-	if (pthread_mutex_init(&arg->waiter, NULL))
-		return (1);
 	if (pthread_mutex_init(&arg->msg, NULL))
 		return (1);
 	if (pthread_mutex_init(&arg->end, NULL))
@@ -52,7 +50,6 @@ t_philo	get_info_philo(t_arg arg, int i)
 	philo.nb_eat = arg.nb_eat;
 	philo.nb_meal = 0;
 	philo.state = 0;
-	philo.waiter = &arg.waiter;
 	philo.msg = &arg.msg;
 	philo.left_fork = &arg.forks[i];
 	if (philo.id == arg.nb_philo)

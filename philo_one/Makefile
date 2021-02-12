@@ -9,7 +9,7 @@ DIR_SRCS	= srcs/
 DIR_OBJS	= objs/
 DIR_INC		= .
 
-F_SRCS		= main.c libft_utils.c thread_utils.c error.c set_threads.c ft_itoa.c handle_actions.c end_simulation.c
+F_SRCS		= main.c libft_utils.c thread_utils.c error.c set_threads.c ft_itoa.c philo_thread.c monitor_thread.c
 SRCS		= $(addprefix $(DIR_SRCS), $(F_SRCS))
 
 OBJS		= $(addprefix $(DIR_OBJS), $(F_SRCS:.c=.o))

@@ -6,94 +6,55 @@
 /*   By: jgonfroy <jgonfroy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 21:47:04 by jgonfroy          #+#    #+#             */
-/*   Updated: 2021/02/11 17:06:40 by jgonfroy         ###   ########.fr       */
+/*   Updated: 2021/02/12 11:47:36 by jgonfroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
-void	*start_philo(void *tmp)
+void	end_philo(t_arg *arg)
 {
-	t_philo *philo;
-
-	philo = tmp;
-	while (philo->state != 1)
-	{
-		handle_eating(philo, *philo);
-		handle_sleeping(*philo);
-		handle_thinking(*philo);
-	}
-	return (NULL);
-}
-
-void	*monitor(void *tmp)
-{
-	int				i;
-	int				diff;
-	int				finished_meal;
-	unsigned long	time;
-	t_arg *arg;
+	int i;
 
 	i = 0;
-	arg = tmp;
-	while (1)
+	pthread_mutex_unlock(arg->cpy_end);
+	pthread_mutex_destroy(arg->cpy_end);
+	pthread_mutex_unlock(arg->philo[0].msg);
+	pthread_mutex_destroy(arg->philo[0].msg);
+	while (i < arg->nb_philo)
 	{
-		time = get_time();
-		finished_meal = 0;
-		while (i < arg->nb_philo)
-		{
-			diff = time - arg->philo[i].last_meal;
-			if (diff > arg->t_die)
-			{
-				handle_death(arg->philo[i]);
-				pthread_mutex_lock(arg->philo[i].msg);
-				pthread_mutex_unlock(arg->cpy_end);
-				return (NULL);
-			}
-			if (arg->philo[i].state == 1)
-				finished_meal++;
-			i++;
-			if (finished_meal == arg->nb_philo)
-			{
-				write(1, "simulation is over\n", 19);
-				pthread_mutex_unlock(arg->cpy_end);
-				return (NULL);
-			}
-		}
-		usleep(1000);
-		i = 0;
+		pthread_mutex_destroy(&arg->forks[i]);
+		i++;
 	}
-	return (NULL);
+	free(arg->philo);
+	free(arg->forks);
+}
+
+int		create_philo(t_arg arg, int i)
+{
+	pthread_t	id;
+
+	while (i < arg.nb_philo)
+	{
+		arg.philo[i] = get_info_philo(arg, i);
+		if (pthread_create(&id, NULL, &start_philo, &arg.philo[i]))
+			return (handle_error("Error with thread\n", arg.philo));
+		pthread_detach(id);
+		usleep(50);
+		i = i + 2;
+	}
+	return (0);
 }
 
 int		set_threads(t_arg arg)
 {
-	int			i;
-	pthread_t	id;
-
 	if (pthread_create(&arg.id_thread, NULL, &monitor, &arg))
 		return (handle_error("Error with thread\n", arg.philo));
 	pthread_detach(arg.id_thread);
-	i = 0;
-	while (i < arg.nb_philo)
-	{
-		arg.philo[i] = get_info_philo(arg, i);
-		if (pthread_create(&id, NULL, &start_philo, &arg.philo[i]))
-			return (handle_error("Error with thread\n", arg.philo));
-		pthread_detach(id);
-		usleep(50);
-		i = i + 2;
-	}
-	i = 1;
-	while (i < arg.nb_philo)
-	{
-		arg.philo[i] = get_info_philo(arg, i);
-		if (pthread_create(&id, NULL, &start_philo, &arg.philo[i]))
-			return (handle_error("Error with thread\n", arg.philo));
-		pthread_detach(id);
-		usleep(50);
-		i = i + 2;
-	}
+	if (create_philo(arg, 0))
+		return (1);
+	if (create_philo(arg, 1))
+		return (1);
 	return (0);
 }
 
@@ -130,5 +91,5 @@ int		main(int ac, char **argv)
 	if (set_threads(arg))
 		return (1);
 	pthread_mutex_lock(&arg.end);
-	//	end_philo(&arg);
+	end_philo(&arg);
 }

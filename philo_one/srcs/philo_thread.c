@@ -6,7 +6,7 @@
 /*   By: jgonfroy <jgonfroy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/07 11:23:08 by jgonfroy          #+#    #+#             */
-/*   Updated: 2021/02/11 16:29:10 by jgonfroy         ###   ########.fr       */
+/*   Updated: 2021/02/12 11:33:01 by jgonfroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,6 @@ void	ft_usleep(unsigned long break_time)
 	end_time = get_time() + break_time;
 	while (get_time() < end_time)
 		usleep(break_time);
-}
-
-int		handle_death(t_philo philo)
-{
-	display_action(philo, "died");
-	return (1);
 }
 
 t_philo	handle_eating(t_philo *ptr, t_philo philo)
@@ -53,4 +47,18 @@ void	handle_sleeping(t_philo philo)
 void	handle_thinking(t_philo philo)
 {
 	display_action(philo, "is thinking");
+}
+
+void	*start_philo(void *tmp)
+{
+	t_philo *philo;
+
+	philo = tmp;
+	while (philo->state != 1)
+	{
+		handle_eating(philo, *philo);
+		handle_sleeping(*philo);
+		handle_thinking(*philo);
+	}
+	return (NULL);
 }
