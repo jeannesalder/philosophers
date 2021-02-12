@@ -1,4 +1,4 @@
-NAME		= philo_one
+NAME		= philo_two
 
 CC		= gcc
 CFLAGS		= -pthread -Werror -Wextra -Wall
@@ -27,7 +27,7 @@ $(NAME):	$(DIR_OBJS) $(OBJS)
 $(DIR_OBJS):
 		@mkdir $(DIR_OBJS)
 
-fsan:	$(DIR_OBJS) $(OBJS)
+fsan:		$(OBJS)
 		${CC} $(CFLAGS) $(FSAN) $(OBJS) -o $(NAME)
 
 val:		$(NAME)

@@ -1,4 +1,4 @@
-philo_one/objs/
-philo_one/philo_one
-philo_one/tmp
-philo_one/srcs/*.swp
+philo_*/objs/
+philo_*/philo_*
+philo_*/tmp
+philo_*/srcs/*.swp
