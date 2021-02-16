@@ -6,7 +6,7 @@
 /*   By: jgonfroy <jgonfroy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 21:47:04 by jgonfroy          #+#    #+#             */
-/*   Updated: 2021/02/12 11:47:36 by jgonfroy         ###   ########.fr       */
+/*   Updated: 2021/02/16 13:26:03 by jgonfroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,13 +48,13 @@ int		create_philo(t_arg arg, int i)
 
 int		set_threads(t_arg arg)
 {
-	if (pthread_create(&arg.id_thread, NULL, &monitor, &arg))
-		return (handle_error("Error with thread\n", arg.philo));
-	pthread_detach(arg.id_thread);
 	if (create_philo(arg, 0))
 		return (1);
 	if (create_philo(arg, 1))
 		return (1);
+	if (pthread_create(&arg.id_thread, NULL, &monitor, &arg))
+		return (handle_error("Error with thread\n", arg.philo));
+	pthread_detach(arg.id_thread);
 	return (0);
 }
 
