@@ -6,7 +6,7 @@
 /*   By: jgonfroy <jgonfroy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/07 11:23:08 by jgonfroy          #+#    #+#             */
-/*   Updated: 2021/02/12 11:33:01 by jgonfroy         ###   ########.fr       */
+/*   Updated: 2021/02/16 15:38:46 by jgonfroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void	*start_philo(void *tmp)
 	t_philo *philo;
 
 	philo = tmp;
-	while (philo->state != 1)
+	while (1)
 	{
 		handle_eating(philo, *philo);
 		handle_sleeping(*philo);
