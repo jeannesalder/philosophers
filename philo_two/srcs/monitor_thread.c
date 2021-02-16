@@ -6,21 +6,22 @@
 /*   By: jgonfroy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/12 11:34:07 by jgonfroy          #+#    #+#             */
-/*   Updated: 2021/02/12 14:38:15 by jgonfroy         ###   ########.fr       */
+/*   Updated: 2021/02/16 15:03:08 by jgonfroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
-void	*handle_death(t_philo philo)
+void	*handle_death(t_arg arg, t_philo philo)
 {
 	display_action(philo, "died");
+	sem_post(arg.ending);
 	return (NULL);
 }
 
-void	*handle_end_meal(void)
+void	*handle_end_meal(t_arg arg)
 {
-	write(1, "simulation is over\n", 19);
+	sem_post(arg.ending);
 	return (NULL);
 }
 
@@ -40,12 +41,12 @@ void	*monitor(void *tmp)
 		while (i < arg->nb_philo)
 		{
 			if ((int)(time - arg->philo[i].last_meal) > arg->t_die)
-				return (handle_death(arg->philo[i]));
+				return (handle_death(*arg, arg->philo[i]));
 			if (arg->philo[i].state == 1)
 				finished_meal++;
 			i++;
 			if (finished_meal == arg->nb_philo)
-				return (handle_end_meal());
+				return (handle_end_meal(*arg));
 		}
 		usleep(1000);
 	}

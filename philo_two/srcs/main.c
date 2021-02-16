@@ -6,7 +6,7 @@
 /*   By: jgonfroy <jgonfroy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 21:47:04 by jgonfroy          #+#    #+#             */
-/*   Updated: 2021/02/16 13:54:28 by jgonfroy         ###   ########.fr       */
+/*   Updated: 2021/02/16 14:56:03 by jgonfroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,7 @@ int		set_threads(t_arg arg)
 	pthread_t	id;
 
 	sem_unlink("forks");
-	sem_unlink("ending");
 	arg.forks = sem_open("forks", O_CREAT, S_IRWXU, arg.nb_philo / 2);
-	arg.ending = sem_open("ending", O_CREAT, S_IRWXU, 1);
-	sem_wait(arg.ending);
 	if (!arg.forks)
 		return (handle_error("Error with semaphore\n", arg.philo));
 	if (create_philo(arg, 0))
@@ -54,7 +51,9 @@ int		set_threads(t_arg arg)
 }
 
 int		set_struct(t_arg *arg, char **argv)
-{
+{	
+	sem_unlink("ending");
+	arg->ending = sem_open("ending", O_CREAT, S_IRWXU, 0);
 	arg->time = get_time();
 	arg->philo = NULL;
 	arg->nb_philo = ft_atoi(argv[1]);
@@ -83,7 +82,6 @@ int		main(int ac, char **argv)
 		return (handle_error("Error with malloc.\n", NULL));
 	if (set_threads(arg))
 		return (1);
-//	sleep (5);
 	sem_wait(arg.ending);
 	end_philo(&arg);
 }
