@@ -6,7 +6,7 @@
 /*   By: jgonfroy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/12 11:34:07 by jgonfroy          #+#    #+#             */
-/*   Updated: 2021/02/12 11:52:07 by jgonfroy         ###   ########.fr       */
+/*   Updated: 2021/02/16 13:34:19 by jgonfroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ void	*handle_death(t_arg *arg, t_philo philo)
 
 void	*handle_end_meal(t_arg *arg)
 {
-	write(1, "simulation is over\n", 19);
 	pthread_mutex_unlock(arg->cpy_end);
 	return (NULL);
 }

@@ -6,7 +6,7 @@
 /*   By: jgonfroy <jgonfroy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/01 16:52:30 by jgonfroy          #+#    #+#             */
-/*   Updated: 2021/02/12 14:30:53 by jgonfroy         ###   ########.fr       */
+/*   Updated: 2021/02/16 13:48:44 by jgonfroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ typedef struct		s_arg
 	int				t_sleep;
 	int				nb_eat;
 	sem_t			*forks;
+	sem_t			*ending;
 	t_philo			*philo;
 }					t_arg;
 
