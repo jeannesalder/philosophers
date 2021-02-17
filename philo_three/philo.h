@@ -6,7 +6,7 @@
 /*   By: jgonfroy <jgonfroy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/01 16:52:30 by jgonfroy          #+#    #+#             */
-/*   Updated: 2021/02/17 12:30:02 by jgonfroy         ###   ########.fr       */
+/*   Updated: 2021/02/17 12:50:08 by jgonfroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,6 @@
 
 typedef struct		s_arg
 {
-	unsigned long	start_time;
-	unsigned long	last_meal;
 	int				id;
 	int				nb_philo;
 	int				t_die;
@@ -33,8 +31,11 @@ typedef struct		s_arg
 	int				t_sleep;
 	int				nb_eat;
 	int				nb_meal;
+	pid_t			*pid;
 	sem_t			*forks;
 	sem_t			*end_meal;
+	unsigned long	start_time;
+	unsigned long	last_meal;
 }					t_arg;
 
 /*

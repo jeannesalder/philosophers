@@ -6,7 +6,7 @@
 /*   By: jgonfroy <jgonfroy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 21:47:04 by jgonfroy          #+#    #+#             */
-/*   Updated: 2021/02/17 12:34:04 by jgonfroy         ###   ########.fr       */
+/*   Updated: 2021/02/17 12:51:38 by jgonfroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,19 @@
 
 int		create_philo(t_arg arg, int i)
 {
-	pid_t		pid;
 //	pthread_t	id;
 
 	while (i < arg.nb_philo)
 	{
-		pid = fork();
-		if (pid == -1)
+		arg.pid[i] = fork();
+		if (arg.pid[i] == -1)
 			exit(handle_error("Error with fork", NULL));
-		if (pid == 0)
+		if (arg.pid[i] == 0)
 		{
 			arg.id = i + 1;
 			loop_philo(&arg);
 	/*		if (pthread_create(&id, NULL, &monitor, &arg))
-				return (handle_error("Error with thread\n", NULL));
+				return (handle_error("Error with thread\n", arg.pid));
 			pthread_detach(id);
 */
 		}
@@ -46,7 +45,7 @@ int		launch_simu(t_arg arg)
 	arg.forks = sem_open("forks", O_CREAT, S_IRWXU, arg.nb_philo / 2);
 	arg.end_meal = sem_open("end_meal", O_CREAT, S_IRWXU, 0);
 	if (!arg.forks || !arg.end_meal)
-		return (handle_error("Error with semaphore\n", NULL));
+		return (handle_error("Error with semaphore\n", arg.pid));
 	if (create_philo(arg, 0))
 		return (1);
 	while (i < arg.nb_philo)
@@ -54,6 +53,13 @@ int		launch_simu(t_arg arg)
 		sem_wait(arg.end_meal);
 		i++;
 	}
+	i = 0;
+	while (i < arg.nb_philo)
+	{
+		kill(arg.pid[i], SIGTERM);
+		i++;
+	}
+	free(arg.pid);
 	//end of philo
 	return (0);
 }
@@ -84,6 +90,8 @@ int		main(int ac, char **argv)
 		return (handle_error_arg("Wrong number of arguments\n"));
 	if (set_struct(&arg, argv))
 		return (handle_error_arg("Wrong arguments\n"));
+	if (xmalloc((void **)&arg.pid, sizeof(t_pid) * arg.nb_philo))
+		return (handle_error("Error with malloc.\n", NULL));
 	if (launch_simu(arg))
 		return (1);
 }
