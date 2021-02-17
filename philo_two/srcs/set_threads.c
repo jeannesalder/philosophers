@@ -6,7 +6,7 @@
 /*   By: jgonfroy <jgonfroy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/03 16:48:22 by jgonfroy          #+#    #+#             */
-/*   Updated: 2021/02/12 15:02:59 by jgonfroy         ###   ########.fr       */
+/*   Updated: 2021/02/17 17:52:08 by jgonfroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ t_philo	get_info_philo(t_arg arg, int i)
 	philo.start_time = arg.time;
 	philo.nb_eat = arg.nb_eat;
 	philo.forks = arg.forks;
+	philo.message = arg.message;
 	philo.nb_meal = 0;
 	philo.state = 0;
 	return (philo);

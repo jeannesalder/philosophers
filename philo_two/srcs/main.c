@@ -6,7 +6,7 @@
 /*   By: jgonfroy <jgonfroy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 21:47:04 by jgonfroy          #+#    #+#             */
-/*   Updated: 2021/02/17 16:23:12 by jgonfroy         ###   ########.fr       */
+/*   Updated: 2021/02/17 17:54:14 by jgonfroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int		create_philo(t_arg arg, int i)
 	while (i < arg.nb_philo)
 	{
 		arg.philo[i] = get_info_philo(arg, i);
-		if (pthread_create(&id, NULL, &start_philo, &arg.philo[i]))
+		if (pthread_create(&id, NULL, &loop_philo, &arg.philo[i]))
 			return (handle_error("Error with thread\n", arg.philo));
 		pthread_detach(id);
 		i++;
@@ -57,6 +57,8 @@ int		set_struct(t_arg *arg, char **argv)
 {
 	sem_unlink("ending");
 	arg->ending = sem_open("ending", O_CREAT, S_IRWXU, 0);
+	sem_unlink("message");
+	arg->message = sem_open("message", O_CREAT, S_IRWXU, 1);
 	arg->time = get_time();
 	arg->philo = NULL;
 	arg->nb_philo = ft_atoi(argv[1]);

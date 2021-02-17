@@ -6,7 +6,7 @@
 /*   By: jgonfroy <jgonfroy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/07 11:43:49 by jgonfroy          #+#    #+#             */
-/*   Updated: 2021/02/17 16:09:41 by jgonfroy         ###   ########.fr       */
+/*   Updated: 2021/02/17 17:11:22 by jgonfroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,12 @@ void			display_action(t_arg arg, char *action)
 	char			*str;
 	unsigned long	time;
 
+	sem_wait(arg.message);
 	time = get_timestamp(arg.start_time);
 	str = compose_str(ft_itoa(time), ft_itoa(arg.id), action);
 	write(1, str, ft_strlen(str));
 	free(str);
+	sem_post(arg.message);
 }
 
 unsigned long	get_time(void)

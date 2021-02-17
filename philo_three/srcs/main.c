@@ -6,7 +6,7 @@
 /*   By: jgonfroy <jgonfroy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 21:47:04 by jgonfroy          #+#    #+#             */
-/*   Updated: 2021/02/17 16:21:03 by jgonfroy         ###   ########.fr       */
+/*   Updated: 2021/02/17 17:13:53 by jgonfroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,10 @@ int		launch_simu(t_arg arg)
 
 	sem_unlink("forks");
 	sem_unlink("end_meal");
+	sem_unlink("message");
 	arg.forks = sem_open("forks", O_CREAT, S_IRWXU, arg.nb_philo / 2);
 	arg.end_meal = sem_open("end_meal", O_CREAT, S_IRWXU, 0);
+	arg.message = sem_open("message", O_CREAT, S_IRWXU, 1);
 	if (!arg.forks || !arg.end_meal)
 		return (handle_error("Error with semaphore\n", arg.pid));
 	if (create_philo(arg, 0))

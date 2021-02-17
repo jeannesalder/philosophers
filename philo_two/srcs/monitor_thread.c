@@ -6,7 +6,7 @@
 /*   By: jgonfroy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/12 11:34:07 by jgonfroy          #+#    #+#             */
-/*   Updated: 2021/02/16 15:03:08 by jgonfroy         ###   ########.fr       */
+/*   Updated: 2021/02/17 18:25:41 by jgonfroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,23 @@
 
 void	*handle_death(t_arg arg, t_philo philo)
 {
-	display_action(philo, "died");
+	char			*str;
+	unsigned long	time;
+
+	sem_wait(arg.message);
+	time = get_timestamp(philo.start_time);
+	str = compose_str(ft_itoa(time), ft_itoa(philo.id), "died");
+	write(1, str, ft_strlen(str));
+	free(str);
 	sem_post(arg.ending);
 	return (NULL);
 }
 
 void	*handle_end_meal(t_arg arg)
 {
+	sem_wait(arg.message);
 	sem_post(arg.ending);
+	write(1, "end of simulation\n", 18);
 	return (NULL);
 }
 

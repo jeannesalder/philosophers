@@ -6,7 +6,7 @@
 /*   By: jgonfroy <jgonfroy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/01 16:52:30 by jgonfroy          #+#    #+#             */
-/*   Updated: 2021/02/17 15:02:19 by jgonfroy         ###   ########.fr       */
+/*   Updated: 2021/02/17 18:14:54 by jgonfroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ typedef struct		s_arg
 	pid_t			*pid;
 	sem_t			*forks;
 	sem_t			*end_meal;
+	sem_t			*message;
 	unsigned long	start_time;
 	unsigned long	last_meal;
 }					t_arg;
@@ -63,6 +64,7 @@ int					ft_strlen(char *str);
 /*
  ** process_utils.c
 */
+char				*compose_str(char *s1, char *s2, char *s3);
 void				display_action(t_arg arg, char *action);
 unsigned long		get_time(void);
 unsigned long		get_timestamp(unsigned long start_time);
