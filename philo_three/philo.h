@@ -6,7 +6,7 @@
 /*   By: jgonfroy <jgonfroy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/01 16:52:30 by jgonfroy          #+#    #+#             */
-/*   Updated: 2021/02/16 15:51:43 by jgonfroy         ###   ########.fr       */
+/*   Updated: 2021/02/17 12:30:02 by jgonfroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,32 +22,19 @@
 # include <stdlib.h>
 # include <string.h>
 
-typedef struct		s_philo
-{
-	int				id;
-	int				t_die;
-	int				t_eat;
-	int				t_sleep;
-	int				state;
-	int				start;
-	int				nb_eat;
-	int				nb_meal;
-	sem_t			*forks;
-	unsigned long	last_meal;
-	unsigned long	start_time;
-}					t_philo;
-
 typedef struct		s_arg
 {
-	unsigned long	time;
+	unsigned long	start_time;
+	unsigned long	last_meal;
+	int				id;
 	int				nb_philo;
 	int				t_die;
 	int				t_eat;
 	int				t_sleep;
 	int				nb_eat;
+	int				nb_meal;
 	sem_t			*forks;
-	sem_t			*ending;
-	t_philo			*philo;
+	sem_t			*end_meal;
 }					t_arg;
 
 /*
@@ -63,24 +50,19 @@ int					handle_error_arg(char *error);
 int					handle_error(char *str, void *item);
 
 /*
- ** set_threads.c
-*/
-t_philo				get_info_philo(t_arg arg, int i);
-
-/*
  ** libft_utils.c
 */
 
-unsigned long		get_time(void);
-unsigned long		get_timestamp(unsigned long start_time);
 int					xmalloc(void **ptr, int size);
 int					ft_atoi(char *str);
 int					ft_strlen(char *str);
 
 /*
- ** libft_utils.c
+ ** process_utils.c
 */
-void				display_action(t_philo philo, char *action);
+void				display_action(t_arg arg, char *action);
+unsigned long		get_time(void);
+unsigned long		get_timestamp(unsigned long start_time);
 
 /*
  ** ft_itoa.c
@@ -89,13 +71,11 @@ void				display_action(t_philo philo, char *action);
 char				*ft_itoa(unsigned long nbr);
 
 /*
- ** philo_thread.c
+ ** philo_process.c
 */
 void				ft_usleep(unsigned long break_time);
-t_philo				handle_eating(t_philo *ptr, t_philo philo);
-void				handle_sleeping(t_philo philo);
-void				handle_thinking(t_philo philo);
-void				*start_philo(void *tmp);
+void				handle_eating(t_arg *arg);
+void				loop_philo(t_arg *arg);
 
 /*
  ** end_simulation.c

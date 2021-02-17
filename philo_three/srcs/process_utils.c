@@ -6,7 +6,7 @@
 /*   By: jgonfroy <jgonfroy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/07 11:43:49 by jgonfroy          #+#    #+#             */
-/*   Updated: 2021/02/12 12:17:34 by jgonfroy         ###   ########.fr       */
+/*   Updated: 2021/02/17 12:20:59 by jgonfroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,13 +39,13 @@ char			*compose_str(char *s1, char *s2, char *s3)
 	return (dest);
 }
 
-void			display_action(t_philo philo, char *action)
+void			display_action(t_arg arg, char *action)
 {
 	char			*str;
 	unsigned long	time;
 
-	time = get_timestamp(philo.start_time);
-	str = compose_str(ft_itoa(time), ft_itoa(philo.id), action);
+	time = get_timestamp(arg.start_time);
+	str = compose_str(ft_itoa(time), ft_itoa(arg.id), action);
 	write(1, str, ft_strlen(str));
 	free(str);
 }

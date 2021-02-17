@@ -6,12 +6,12 @@
 /*   By: jgonfroy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/12 11:34:07 by jgonfroy          #+#    #+#             */
-/*   Updated: 2021/02/16 15:03:08 by jgonfroy         ###   ########.fr       */
+/*   Updated: 2021/02/17 12:33:17 by jgonfroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
-
+/*
 void	*handle_death(t_arg arg, t_philo philo)
 {
 	display_action(philo, "died");
@@ -51,4 +51,4 @@ void	*monitor(void *tmp)
 		usleep(1000);
 	}
 	return (NULL);
-}
+}*/
