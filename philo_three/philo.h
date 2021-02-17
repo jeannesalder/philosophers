@@ -6,7 +6,7 @@
 /*   By: jgonfroy <jgonfroy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/01 16:52:30 by jgonfroy          #+#    #+#             */
-/*   Updated: 2021/02/17 12:50:08 by jgonfroy         ###   ########.fr       */
+/*   Updated: 2021/02/17 15:02:19 by jgonfroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
+# include <signal.h>
 
 typedef struct		s_arg
 {
@@ -42,7 +43,8 @@ typedef struct		s_arg
  ** monitor_thread.c
 */
 
-void				*monitor(void *tmp);
+void				*monitor_death(void *tmp);
+void				*monitor_meal(void *tmp);
 
 /*
  ** error.c
@@ -81,7 +83,7 @@ void				loop_philo(t_arg *arg);
 /*
  ** end_simulation.c
 */
-void				end_philo(t_arg *arg);
+void				end_philo(t_arg arg);
 int					is_finish(t_arg arg);
 
 #endif

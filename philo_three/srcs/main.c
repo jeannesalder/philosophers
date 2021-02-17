@@ -6,15 +6,33 @@
 /*   By: jgonfroy <jgonfroy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 21:47:04 by jgonfroy          #+#    #+#             */
-/*   Updated: 2021/02/17 12:51:38 by jgonfroy         ###   ########.fr       */
+/*   Updated: 2021/02/17 15:12:05 by jgonfroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
+void	end_philo(t_arg arg)
+{
+	int	i;
+
+	i = 0;
+	while (i < arg.nb_philo)
+	{
+		kill(arg.pid[i], SIGTERM);
+		i++;
+	}
+	free(arg.pid);
+	sem_close(arg.forks);
+	sem_close(arg.end_meal);
+	sem_unlink("forks");	
+	sem_unlink("end_meal");
+	exit(0);
+}
+
 int		create_philo(t_arg arg, int i)
 {
-//	pthread_t	id;
+	pthread_t	id;
 
 	while (i < arg.nb_philo)
 	{
@@ -24,11 +42,10 @@ int		create_philo(t_arg arg, int i)
 		if (arg.pid[i] == 0)
 		{
 			arg.id = i + 1;
-			loop_philo(&arg);
-	/*		if (pthread_create(&id, NULL, &monitor, &arg))
-				return (handle_error("Error with thread\n", arg.pid));
+			if (pthread_create(&id, NULL, &monitor_death, &arg))
+				return (handle_error("error with thread\n", arg.pid));
 			pthread_detach(id);
-*/
+			loop_philo(&arg);
 		}
 		i++;
 	}
@@ -37,9 +54,8 @@ int		create_philo(t_arg arg, int i)
 
 int		launch_simu(t_arg arg)
 {
-	int	i;
-
-	i = 0;
+	pthread_t	id;
+	
 	sem_unlink("forks");
 	sem_unlink("end_meal");
 	arg.forks = sem_open("forks", O_CREAT, S_IRWXU, arg.nb_philo / 2);
@@ -48,19 +64,14 @@ int		launch_simu(t_arg arg)
 		return (handle_error("Error with semaphore\n", arg.pid));
 	if (create_philo(arg, 0))
 		return (1);
-	while (i < arg.nb_philo)
+	if (arg.nb_meal != -1)
 	{
-		sem_wait(arg.end_meal);
-		i++;
+		if (pthread_create(&id, NULL, &monitor_meal, &arg))
+				return (handle_error("error with thread\n", arg.pid));
+		pthread_join(id, NULL);
 	}
-	i = 0;
-	while (i < arg.nb_philo)
-	{
-		kill(arg.pid[i], SIGTERM);
-		i++;
-	}
-	free(arg.pid);
-	//end of philo
+	waitpid(-1, NULL, 0);
+	end_philo(arg);
 	return (0);
 }
 
@@ -68,6 +79,7 @@ int		set_struct(t_arg *arg, char **argv)
 {
 	arg->start_time = get_time();
 	arg->last_meal = arg->start_time;
+	arg->nb_meal = 0;
 	arg->nb_philo = ft_atoi(argv[1]);
 	arg->t_die = ft_atoi(argv[2]);
 	arg->t_eat = ft_atoi(argv[3]);
@@ -90,7 +102,7 @@ int		main(int ac, char **argv)
 		return (handle_error_arg("Wrong number of arguments\n"));
 	if (set_struct(&arg, argv))
 		return (handle_error_arg("Wrong arguments\n"));
-	if (xmalloc((void **)&arg.pid, sizeof(t_pid) * arg.nb_philo))
+	if (xmalloc((void **)&arg.pid, sizeof(pid_t) * arg.nb_philo))
 		return (handle_error("Error with malloc.\n", NULL));
 	if (launch_simu(arg))
 		return (1);
