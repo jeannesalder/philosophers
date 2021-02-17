@@ -6,16 +6,15 @@
 /*   By: jgonfroy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/12 11:34:07 by jgonfroy          #+#    #+#             */
-/*   Updated: 2021/02/17 15:04:43 by jgonfroy         ###   ########.fr       */
+/*   Updated: 2021/02/17 16:22:01 by jgonfroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
 int	handle_death(t_arg arg)
-{	
-	display_action(arg, "died");	
-//	sem_post(arg.ending);	
+{
+	display_action(arg, "died");
 	return (1);
 }
 
@@ -47,6 +46,7 @@ void	*monitor_meal(void *tmp)
 		sem_wait(arg->end_meal);
 		i++;
 	}
+	end_philo(*arg);
 	exit(0);
 	return (NULL);
 }

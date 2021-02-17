@@ -6,7 +6,7 @@
 /*   By: jgonfroy <jgonfroy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 21:47:04 by jgonfroy          #+#    #+#             */
-/*   Updated: 2021/02/17 15:12:05 by jgonfroy         ###   ########.fr       */
+/*   Updated: 2021/02/17 16:21:03 by jgonfroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,6 @@ void	end_philo(t_arg arg)
 		i++;
 	}
 	free(arg.pid);
-	sem_close(arg.forks);
-	sem_close(arg.end_meal);
-	sem_unlink("forks");	
-	sem_unlink("end_meal");
-	exit(0);
 }
 
 int		create_philo(t_arg arg, int i)
@@ -55,7 +50,7 @@ int		create_philo(t_arg arg, int i)
 int		launch_simu(t_arg arg)
 {
 	pthread_t	id;
-	
+
 	sem_unlink("forks");
 	sem_unlink("end_meal");
 	arg.forks = sem_open("forks", O_CREAT, S_IRWXU, arg.nb_philo / 2);
@@ -65,11 +60,8 @@ int		launch_simu(t_arg arg)
 	if (create_philo(arg, 0))
 		return (1);
 	if (arg.nb_meal != -1)
-	{
 		if (pthread_create(&id, NULL, &monitor_meal, &arg))
-				return (handle_error("error with thread\n", arg.pid));
-		pthread_join(id, NULL);
-	}
+			return (handle_error("error with thread\n", arg.pid));
 	waitpid(-1, NULL, 0);
 	end_philo(arg);
 	return (0);
