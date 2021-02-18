@@ -6,29 +6,11 @@
 /*   By: jgonfroy <jgonfroy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 21:47:04 by jgonfroy          #+#    #+#             */
-/*   Updated: 2021/02/17 16:22:46 by jgonfroy         ###   ########.fr       */
+/*   Updated: 2021/02/18 10:46:48 by jgonfroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
-
-void	end_philo(t_arg *arg)
-{
-	int i;
-
-	i = 0;
-	pthread_mutex_unlock(arg->cpy_end);
-	pthread_mutex_destroy(arg->cpy_end);
-	pthread_mutex_unlock(arg->philo[0].msg);
-	pthread_mutex_destroy(arg->philo[0].msg);
-	while (i < arg->nb_philo)
-	{
-		pthread_mutex_destroy(&arg->forks[i]);
-		i++;
-	}
-	free(arg->philo);
-	free(arg->forks);
-}
 
 int		create_philo(t_arg arg, int i)
 {
@@ -91,5 +73,6 @@ int		main(int ac, char **argv)
 	if (set_threads(arg))
 		return (1);
 	pthread_mutex_lock(&arg.end);
-	end_philo(&arg);
+	free(arg.philo);
+	free(arg.forks);
 }

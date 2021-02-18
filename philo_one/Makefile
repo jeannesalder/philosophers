@@ -21,7 +21,7 @@ all:		$(NAME)
 $(DIR_OBJS)%.o: $(DIR_SRCS)%.c
 		$(CC) $(CFLAGS) $(HEADER) -c $< -o $@
 
-$(NAME):	$(DIR_OBJS) $(OBJS)
+$(NAME):	$(DIR_OBJS) $(OBJS) 	
 		${CC} $(CFLAGS) $(OBJS) -o $(NAME)
 
 $(DIR_OBJS):
