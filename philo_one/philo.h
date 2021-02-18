@@ -6,11 +6,7 @@
 /*   By: jgonfroy <jgonfroy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/01 16:52:30 by jgonfroy          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2021/02/18 13:32:10 by jgonfroy         ###   ########.fr       */
-=======
-/*   Updated: 2021/02/12 11:56:18 by jgonfroy         ###   ########.fr       */
->>>>>>> parent of bf4f764... oopsie norme
+/*   Updated: 2021/02/18 10:58:31 by jgonfroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +45,7 @@ typedef struct		s_arg
 	int				t_eat;
 	int				t_sleep;
 	int				nb_eat;
-	pthread_t		*id;
+	pthread_t		id_thread;
 	pthread_mutex_t	msg;
 	pthread_mutex_t	end;
 	pthread_mutex_t	*cpy_end;
@@ -78,9 +74,6 @@ t_philo				get_info_philo(t_arg arg, int i);
 /*
  ** libft_utils.c
 */
-
-unsigned long		get_time(void);
-unsigned long		get_timestamp(unsigned long start_time);
 int					xmalloc(void **ptr, int size);
 int					ft_atoi(char *str);
 int					ft_strlen(char *str);
@@ -88,7 +81,10 @@ int					ft_strlen(char *str);
 /*
  ** libft_utils.c
 */
+char				*compose_str(char *s1, char *s2, char *s3);
 void				display_action(t_philo philo, char *action);
+unsigned long		get_time(void);
+unsigned long		get_timestamp(unsigned long start_time);
 
 /*
  ** ft_itoa.c
