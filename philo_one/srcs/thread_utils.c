@@ -6,7 +6,7 @@
 /*   By: jgonfroy <jgonfroy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/07 11:43:49 by jgonfroy          #+#    #+#             */
-/*   Updated: 2021/02/12 10:23:29 by jgonfroy         ###   ########.fr       */
+/*   Updated: 2021/02/18 17:03:44 by jgonfroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ char			*compose_str(char *s1, char *s2, char *s3)
 		dest[i++] = s3[j++];
 	dest[i++] = '\n';
 	dest[i] = 0;
+	free(s1);
+	free(s2);
 	return (dest);
 }
 
@@ -45,10 +47,13 @@ void			display_action(t_philo philo, char *action)
 	unsigned long	time;
 
 	pthread_mutex_lock(philo.msg);
-	time = get_timestamp(philo.start_time);
-	str = compose_str(ft_itoa(time), ft_itoa(philo.id), action);
-	write(1, str, ft_strlen(str));
-	free(str);
+	if ((int)(get_time() - philo.last_meal) < philo.t_die)
+	{
+		time = get_timestamp(philo.start_time);
+		str = compose_str(ft_itoa(time), ft_itoa(philo.id), action);
+		write(1, str, ft_strlen(str));
+		free(str);
+	}
 	pthread_mutex_unlock(philo.msg);
 }
 

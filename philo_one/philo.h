@@ -6,7 +6,7 @@
 /*   By: jgonfroy <jgonfroy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/01 16:52:30 by jgonfroy          #+#    #+#             */
-/*   Updated: 2021/02/18 10:58:31 by jgonfroy         ###   ########.fr       */
+/*   Updated: 2021/02/18 17:00:42 by jgonfroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ void				*start_philo(void *tmp);
 /*
  ** end_simulation.c
 */
-void				end_philo(t_arg *arg);
+void				end_philo(t_arg arg);
 int					is_finish(t_arg arg);
 
 #endif

@@ -6,11 +6,24 @@
 /*   By: jgonfroy <jgonfroy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 21:47:04 by jgonfroy          #+#    #+#             */
-/*   Updated: 2021/02/18 14:47:23 by jgonfroy         ###   ########.fr       */
+/*   Updated: 2021/02/18 17:02:45 by jgonfroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
+
+void	end_philo(t_arg arg)
+{
+	int	i;
+
+	i = 0;
+	pthread_mutex_destroy(&arg.msg);
+	pthread_mutex_destroy(&arg.end);
+	while (i < arg.nb_philo)
+		pthread_mutex_destroy(&arg.forks[i++]);
+	free(arg.philo);
+	free(arg.forks);
+}
 
 int		create_philo(t_arg arg, int i)
 {
@@ -73,6 +86,6 @@ int		main(int ac, char **argv)
 	if (set_threads(arg))
 		return (1);
 	pthread_mutex_lock(&arg.end);
-	free(arg.philo);
-	free(arg.forks);
+	usleep(arg.t_die * 1000);
+	end_philo(arg);
 }

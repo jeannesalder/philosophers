@@ -6,7 +6,7 @@
 /*   By: jgonfroy <jgonfroy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/07 11:43:49 by jgonfroy          #+#    #+#             */
-/*   Updated: 2021/02/17 17:11:22 by jgonfroy         ###   ########.fr       */
+/*   Updated: 2021/02/18 15:16:00 by jgonfroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ char			*compose_str(char *s1, char *s2, char *s3)
 		dest[i++] = s3[j++];
 	dest[i++] = '\n';
 	dest[i] = 0;
+	free(s1);
+	free(s2);
 	return (dest);
 }
 
