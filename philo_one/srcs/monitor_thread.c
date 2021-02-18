@@ -6,7 +6,7 @@
 /*   By: jgonfroy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/12 11:34:07 by jgonfroy          #+#    #+#             */
-/*   Updated: 2021/02/18 10:40:14 by jgonfroy         ###   ########.fr       */
+/*   Updated: 2021/02/18 11:00:58 by jgonfroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,14 @@
 
 void	*handle_death(t_arg *arg, t_philo philo)
 {
-	(void)arg;
-	//display_action(philo, "died");
+	char			*str;
+	unsigned long	time;
+
 	pthread_mutex_lock(philo.msg);
-	write(1, "YOU DEAD MOTHAFUCKA\n", 20);
+	time = get_timestamp(philo.start_time);
+	str = compose_str(ft_itoa(time), ft_itoa(philo.id), "died");
+	write(1, str, ft_strlen(str));
+	free(str);
 	pthread_mutex_unlock(arg->cpy_end);
 	return (NULL);
 }
@@ -46,7 +50,7 @@ void	*monitor(void *tmp)
 		while (i < arg->nb_philo)
 		{
 			if ((int)(time - arg->philo[i].last_meal) > arg->t_die)
-					return(handle_death(arg, arg->philo[i]));
+				return (handle_death(arg, arg->philo[i]));
 			if (arg->philo[i].state == 1)
 				finished_meal++;
 			i++;
