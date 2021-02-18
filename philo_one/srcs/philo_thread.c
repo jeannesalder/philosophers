@@ -6,7 +6,7 @@
 /*   By: jgonfroy <jgonfroy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/07 11:23:08 by jgonfroy          #+#    #+#             */
-/*   Updated: 2021/02/16 15:38:46 by jgonfroy         ###   ########.fr       */
+/*   Updated: 2021/02/18 17:47:20 by jgonfroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,11 +44,6 @@ void	handle_sleeping(t_philo philo)
 	ft_usleep(philo.t_sleep);
 }
 
-void	handle_thinking(t_philo philo)
-{
-	display_action(philo, "is thinking");
-}
-
 void	*start_philo(void *tmp)
 {
 	t_philo *philo;
@@ -58,7 +53,7 @@ void	*start_philo(void *tmp)
 	{
 		handle_eating(philo, *philo);
 		handle_sleeping(*philo);
-		handle_thinking(*philo);
+		display_action(*philo, "is thinking");
 	}
 	return (NULL);
 }
