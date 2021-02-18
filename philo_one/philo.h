@@ -6,7 +6,7 @@
 /*   By: jgonfroy <jgonfroy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/01 16:52:30 by jgonfroy          #+#    #+#             */
-/*   Updated: 2021/02/18 10:58:31 by jgonfroy         ###   ########.fr       */
+/*   Updated: 2021/02/18 13:32:10 by jgonfroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ typedef struct		s_arg
 	int				t_eat;
 	int				t_sleep;
 	int				nb_eat;
-	pthread_t		id_thread;
+	pthread_t		*id;
 	pthread_mutex_t	msg;
 	pthread_mutex_t	end;
 	pthread_mutex_t	*cpy_end;

@@ -6,7 +6,7 @@
 /*   By: jgonfroy <jgonfroy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 21:47:04 by jgonfroy          #+#    #+#             */
-/*   Updated: 2021/02/18 10:46:48 by jgonfroy         ###   ########.fr       */
+/*   Updated: 2021/02/18 13:35:29 by jgonfroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,16 @@
 
 int		create_philo(t_arg arg, int i)
 {
-	pthread_t	id;
+	if (xmalloc((void **)&(arg.id), sizeof(pthread_t) * (arg.nb_philo + 1)))
+		return (handle_error("Error with malloc.\n", NULL));
 
+	
 	while (i < arg.nb_philo)
 	{
 		arg.philo[i] = get_info_philo(arg, i);
-		if (pthread_create(&id, NULL, &start_philo, &arg.philo[i]))
+		if (pthread_create(&arg.id[i], NULL, &start_philo, &arg.philo[i]))
 			return (handle_error("Error with thread\n", arg.philo));
-		pthread_detach(id);
+//		pthread_detach(id);
 		i = i + 2;
 	}
 	return (0);
@@ -34,9 +36,9 @@ int		set_threads(t_arg arg)
 	usleep(50);
 	if (create_philo(arg, 1))
 		return (1);
-	if (pthread_create(&arg.id_thread, NULL, &monitor, &arg))
+	if (pthread_create(&arg.id[arg.nb_philo], NULL, &monitor, &arg))
 		return (handle_error("Error with thread\n", arg.philo));
-	pthread_detach(arg.id_thread);
+	pthread_detach(arg.id[arg.nb_philo]);
 	return (0);
 }
 
@@ -73,6 +75,10 @@ int		main(int ac, char **argv)
 	if (set_threads(arg))
 		return (1);
 	pthread_mutex_lock(&arg.end);
+int	i = 0;
+	while (i < arg.nb_philo)
+		pthread_join(arg.id[i++], NULL);
 	free(arg.philo);
 	free(arg.forks);
+	system("leaks philo_one");
 }
