@@ -6,7 +6,7 @@
 /*   By: jgonfroy <jgonfroy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 21:47:04 by jgonfroy          #+#    #+#             */
-/*   Updated: 2021/02/18 17:54:56 by jgonfroy         ###   ########.fr       */
+/*   Updated: 2021/02/19 11:17:46 by jgonfroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ int		create_philo(t_arg arg, int i)
 		if (pthread_create(&id, NULL, &start_philo, &arg.philo[i]))
 			return (handle_error("Error with thread\n", arg.philo));
 		pthread_detach(id);
+		usleep(50);
 		i = i + 2;
 	}
 	return (0);
