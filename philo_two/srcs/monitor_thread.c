@@ -6,7 +6,7 @@
 /*   By: jgonfroy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/12 11:34:07 by jgonfroy          #+#    #+#             */
-/*   Updated: 2021/02/17 18:25:41 by jgonfroy         ###   ########.fr       */
+/*   Updated: 2021/02/19 18:10:17 by jgonfroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,8 @@ void	*handle_death(t_arg arg, t_philo philo)
 void	*handle_end_meal(t_arg arg)
 {
 	sem_wait(arg.message);
-	sem_post(arg.ending);
 	write(1, "end of simulation\n", 18);
+	sem_post(arg.ending);
 	return (NULL);
 }
 
