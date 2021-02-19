@@ -6,7 +6,7 @@
 /*   By: jgonfroy <jgonfroy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 21:47:04 by jgonfroy          #+#    #+#             */
-/*   Updated: 2021/02/18 15:17:06 by jgonfroy         ###   ########.fr       */
+/*   Updated: 2021/02/19 17:50:22 by jgonfroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,12 @@ void	end_philo(t_arg arg)
 		i++;
 	}
 	free(arg.pid);
+	sem_close(arg.forks);
+	sem_close(arg.end_meal);
+	sem_close(arg.message);
+	sem_unlink("forks");
+	sem_unlink("end_meal");
+	sem_unlink("message");
 }
 
 int		create_philo(t_arg arg, int i)
