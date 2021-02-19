@@ -1,7 +1,8 @@
 NAME		= philo_one
 
-CC		= gcc
-CFLAGS		= -pthread -Werror -Wextra -Wall
+CC		= clang-9
+CFLAGS		= -pthread -Werror -Wextra -Wall -D_REENTRANT
+MAC		= gcc -pthread -Werror -Wextra -Wall
 FSAN		= -g3 -fsanitize=address
 RM		= rm -rf
 
@@ -21,11 +22,14 @@ all:		$(NAME)
 $(DIR_OBJS)%.o: $(DIR_SRCS)%.c
 		$(CC) $(CFLAGS) $(HEADER) -c $< -o $@
 
-$(NAME):	$(DIR_OBJS) $(OBJS) 	
+$(NAME):	$(DIR_OBJS) $(OBJS)
 		${CC} $(CFLAGS) $(OBJS) -o $(NAME)
 
 $(DIR_OBJS):
 		@mkdir $(DIR_OBJS)
+
+macos:		$(DIR_OBJS) $(OBJS)
+		$(MAC) $(OBJS) -o $(NAME)
 
 fsan:	$(DIR_OBJS) $(OBJS)
 		${CC} $(CFLAGS) $(FSAN) $(OBJS) -o $(NAME)

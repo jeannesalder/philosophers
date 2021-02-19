@@ -6,7 +6,7 @@
 /*   By: jgonfroy <jgonfroy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/01 16:52:30 by jgonfroy          #+#    #+#             */
-/*   Updated: 2021/02/18 17:00:42 by jgonfroy         ###   ########.fr       */
+/*   Updated: 2021/02/19 16:52:31 by jgonfroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,12 +47,13 @@ typedef struct		s_arg
 	int				nb_eat;
 	pthread_t		id_thread;
 	pthread_mutex_t	msg;
+	pthread_mutex_t	*cpy_msg;
 	pthread_mutex_t	end;
 	pthread_mutex_t	*cpy_end;
 	pthread_mutex_t	*forks;
 	t_philo			*philo;
-}					t_arg;
-
+}
+					t_arg;
 /*
  ** monitor_thread.c
 */

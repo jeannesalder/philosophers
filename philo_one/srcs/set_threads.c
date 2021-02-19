@@ -6,7 +6,7 @@
 /*   By: jgonfroy <jgonfroy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/03 16:48:22 by jgonfroy          #+#    #+#             */
-/*   Updated: 2021/02/12 10:28:57 by jgonfroy         ###   ########.fr       */
+/*   Updated: 2021/02/19 16:54:23 by jgonfroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ int		set_mutexes(t_arg *arg)
 		return (1);
 	pthread_mutex_lock(&arg->end);
 	arg->cpy_end = &arg->end;
+	arg->cpy_msg = &arg->msg;
 	if (xmalloc((void **)&arg->forks, sizeof(pthread_mutex_t) * arg->nb_philo))
 		return (1);
 	while (i < arg->nb_philo)
@@ -50,7 +51,7 @@ t_philo	get_info_philo(t_arg arg, int i)
 	philo.nb_eat = arg.nb_eat;
 	philo.nb_meal = 0;
 	philo.state = 0;
-	philo.msg = &arg.msg;
+	philo.msg = arg.cpy_msg;
 	philo.left_fork = &arg.forks[i];
 	if (philo.id == arg.nb_philo)
 		philo.right_fork = &arg.forks[0];
