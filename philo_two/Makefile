@@ -8,7 +8,7 @@ RM		= rm -rf
 
 DIR_SRCS	= srcs/
 DIR_OBJS	= objs/
-MDIR_OBJS	= objs/
+MDIR_OBJS	= mobjs/
 DIR_INC		= .
 
 F_SRCS		= main.c libft_utils.c thread_utils.c error.c set_threads.c ft_itoa.c philo_thread.c monitor_thread.c
@@ -33,6 +33,9 @@ $(NAME):	$(DIR_OBJS) $(OBJS)
 $(DIR_OBJS):
 		@mkdir $(DIR_OBJS)
 
+$(MDIR_OBJS):
+		@mkdir $(MDIR_OBJS)
+
 macos:		$(MDIR_OBJS) $(MOBJS)
 		$(MAC) $(MOBJS) -o $(NAME)
 
@@ -43,7 +46,7 @@ val:		$(NAME)
 		valgrind --tool=memcheck --leak-check=full --leak-resolution=high --show-reachable=yes ./$(NAME) 4 800 200 200 2
 
 clean:
-		$(RM) $(DIR_OBJS)
+		$(RM) $(DIR_OBJS) $(MDIR_OBJS)
 
 fclean:		clean
 		$(RM) $(NAME)
