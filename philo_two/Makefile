@@ -1,7 +1,8 @@
 NAME		= philo_two
 
-CC		= gcc
-CFLAGS		= -pthread -Werror -Wextra -Wall
+CC		= clang-9
+CFLAGS		= -pthread -Werror -Wextra -Wall -D_REENTRANT
+MAC             = gcc -pthread -Werror -Wextra -Wall
 FSAN		= -g3 -fsanitize=address
 RM		= rm -rf
 
@@ -27,11 +28,14 @@ $(NAME):	$(DIR_OBJS) $(OBJS)
 $(DIR_OBJS):
 		@mkdir $(DIR_OBJS)
 
+macos:		$(DIR_OBJS) $(OBJS)
+		$(MAC) $(OBJS) -o $(NAME)
+
 fsan:		$(OBJS)
 		${CC} $(CFLAGS) $(FSAN) $(OBJS) -o $(NAME)
 
 val:		$(NAME)
-		valgrind --tool=memcheck --leak-check=full --leak-resolution=high --show-reachable=yes ./$(NAME) 4 600 400 200
+		valgrind --tool=memcheck --leak-check=full --leak-resolution=high --show-reachable=yes ./$(NAME) 4 800 200 200 2
 
 clean:
 		$(RM) $(DIR_OBJS)

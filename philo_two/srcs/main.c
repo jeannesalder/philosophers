@@ -6,7 +6,7 @@
 /*   By: jgonfroy <jgonfroy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 21:47:04 by jgonfroy          #+#    #+#             */
-/*   Updated: 2021/02/19 11:20:43 by jgonfroy         ###   ########.fr       */
+/*   Updated: 2021/02/19 17:39:26 by jgonfroy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,12 @@
 
 void	end_philo(t_arg *arg)
 {
-	free(arg->philo);
-	free(arg->forks);
 	sem_close(arg->forks);
+	sem_close(arg->philo[0].forks);
 	sem_close(arg->ending);
 	sem_close(arg->message);
+	sem_close(arg->philo[0].message);
+	free(arg->philo);
 	sem_unlink("forks");
 	sem_unlink("ending");
 	sem_unlink("message");
